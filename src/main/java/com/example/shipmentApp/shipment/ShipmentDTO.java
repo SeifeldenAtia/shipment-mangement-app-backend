@@ -40,4 +40,16 @@ public class ShipmentDTO {
         private String estimatedDelivery;
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateShipmentRequest {
+
+        private ShipmentStatus status;
+
+        private String currentLocation;
+    }
+
 }

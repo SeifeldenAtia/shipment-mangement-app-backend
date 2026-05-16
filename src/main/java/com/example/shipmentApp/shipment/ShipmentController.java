@@ -43,4 +43,12 @@ public class ShipmentController {
         ShipmentDTO.ShipmentResponse shipment = shipmentService.getShipmentByTrackingNumber(trackingNumber);
         return ResponseEntity.status(HttpStatus.OK).body(shipment);
     }
+
+    @PutMapping("/{id}")
+    private ResponseEntity<ShipmentDTO.ShipmentResponse> updateShipment
+            (@RequestBody ShipmentDTO.UpdateShipmentRequest updateShipmentRequest, @PathVariable Long id) {
+
+        var shipmentResponse = shipmentService.updateShipment(updateShipmentRequest, id);
+        return ResponseEntity.status(HttpStatus.OK).body(shipmentResponse);
+    }
 }

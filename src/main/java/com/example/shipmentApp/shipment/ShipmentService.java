@@ -2,8 +2,10 @@ package com.example.shipmentApp.shipment;
 
 
 import com.example.shipmentApp.shipment.error.ShipmentNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.UUID;
@@ -67,5 +69,20 @@ public class ShipmentService {
                 );
 
         return mapToResponse(shipment);
+    }
+
+    public ShipmentDTO.ShipmentResponse updateShipment(
+            ShipmentDTO.UpdateShipmentRequest request, @PathVariable Long id) {
+
+        var shipment = shipmentRepository.findById(id)
+                .orElseThrow(() -> new ShipmentNotFoundException("Shipment not found with id " + id));
+
+        shipment.setStatus(request.getStatus());
+        shipment.setCurrentLocation(request.getCurrentLocation());
+
+        shipment = shipmentRepository.save(shipment);
+
+        return mapToResponse(shipment);
+
     }
 }
