@@ -4,10 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shipments")
@@ -23,7 +22,13 @@ public class ShipmentController {
             ) {
 
         var shipmentResponse = shipmentService.createShipment(createShipmentRequest);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentResponse);
+    }
+
+    @GetMapping
+    private ResponseEntity<List<ShipmentDTO.ShipmentResponse>> getAllShipments() {
+
+        var shipments = shipmentService.getAllShipments();
+        return ResponseEntity.status(HttpStatus.OK).body(shipments);
     }
 }

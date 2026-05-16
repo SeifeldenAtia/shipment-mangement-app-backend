@@ -4,7 +4,9 @@ package com.example.shipmentApp.shipment;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -43,5 +45,10 @@ public class ShipmentService {
                 .estimatedDelivery(shipment.getEstimatedDelivery())
                 .build();
 
+    }
+
+    public List<ShipmentDTO.ShipmentResponse> getAllShipments() {
+        List<Shipment> shipments = shipmentRepository.findAll();
+        return shipments.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 }
