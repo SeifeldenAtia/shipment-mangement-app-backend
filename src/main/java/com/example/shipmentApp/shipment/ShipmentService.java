@@ -1,6 +1,7 @@
 package com.example.shipmentApp.shipment;
 
 
+import com.example.shipmentApp.shipment.error.ShipmentNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,14 +55,16 @@ public class ShipmentService {
 
     public ShipmentDTO.ShipmentResponse getShipmentById(Long id) {
         Shipment shipment = shipmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("This shipment isn't exist!"));
+                .orElseThrow(() -> new ShipmentNotFoundException("Shipment not found with id " + id));
 
         return mapToResponse(shipment);
     }
 
     public ShipmentDTO.ShipmentResponse getShipmentByTrackingNumber(String trackingNumber) {
         Shipment shipment = shipmentRepository.findByTrackingNumber(trackingNumber)
-                .orElseThrow(() -> new RuntimeException("This shipment isn't exist!"));
+                .orElseThrow(
+                        () -> new ShipmentNotFoundException("Shipment not found with trackingNumber " + trackingNumber)
+                );
 
         return mapToResponse(shipment);
     }

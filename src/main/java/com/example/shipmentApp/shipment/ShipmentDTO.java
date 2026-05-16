@@ -40,5 +40,4 @@ public class ShipmentDTO {
         private String estimatedDelivery;
     }
 
-
 }
