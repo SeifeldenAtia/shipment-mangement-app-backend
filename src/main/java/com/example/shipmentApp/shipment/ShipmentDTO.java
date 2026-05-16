@@ -48,8 +48,22 @@ public class ShipmentDTO {
     public static class UpdateShipmentRequest {
 
         private ShipmentStatus status;
-
         private String currentLocation;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StatusUpdateMessage {
+        
+        private Long shipmentId;
+        private String trackingNumber;
+        private ShipmentStatus status;
+        private String currentLocation;
+        private LocalDateTime timestamp;
+        private String message;
     }
 
 }

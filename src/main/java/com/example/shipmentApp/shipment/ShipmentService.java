@@ -2,8 +2,9 @@ package com.example.shipmentApp.shipment;
 
 
 import com.example.shipmentApp.shipment.error.ShipmentNotFoundException;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ShipmentService {
 
     private final ShipmentRepository shipmentRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public ShipmentDTO.ShipmentResponse createShipment(ShipmentDTO.CreateShipmentRequest request) {
         final String trackingNumber = generateTrackingNumber();
@@ -27,6 +30,7 @@ public class ShipmentService {
                 .build();
 
         shipmentRepository.save(shipment);
+        notifyShipmentStatus(shipment, getStatusMessage(shipment.getStatus()));
 
         return mapToResponse(shipment);
     }
@@ -81,8 +85,36 @@ public class ShipmentService {
         shipment.setCurrentLocation(request.getCurrentLocation());
 
         shipment = shipmentRepository.save(shipment);
+        notifyShipmentStatus(shipment, getStatusMessage(shipment.getStatus()));
 
         return mapToResponse(shipment);
+    }
 
+    public void notifyShipmentStatus(Shipment shipment, String message) {
+        var update = ShipmentDTO.StatusUpdateMessage.builder()
+                .shipmentId(shipment.getId())
+                .trackingNumber(shipment.getTrackingNumber())
+                .status(shipment.getStatus())
+                .currentLocation(shipment.getCurrentLocation())
+                .timestamp(shipment.getUpdatedAt())
+                .message(message)
+                .build();
+
+        messagingTemplate.convertAndSend("/topic/shipments", update);
+        messagingTemplate.convertAndSend("/topic/shipments" + shipment.getId(), update);
+
+        log.info("Sent shipment status update: {}", update);
+    }
+
+    private String getStatusMessage(ShipmentStatus status) {
+        return switch (status) {
+            case ORDER_PLACED -> "Order has been placed";
+            case PROCESSING -> "Order is being processed";
+            case PICKED_UP -> "Package has been picked up";
+            case IN_TRANSIT -> "Package is in transit";
+            case OUT_FOR_DELIVERY -> "Package is out for delivery";
+            case DELIVERED -> "Package has been delivered";
+            case EXCEPTION -> "Delivery exception occurred";
+        };
     }
 }
