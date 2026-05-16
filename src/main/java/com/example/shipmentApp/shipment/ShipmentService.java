@@ -51,4 +51,11 @@ public class ShipmentService {
         List<Shipment> shipments = shipmentRepository.findAll();
         return shipments.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
+
+    public ShipmentDTO.ShipmentResponse getShipmentById(Long id) {
+        Shipment shipment = shipmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("This shipment isn't exist!"));
+
+        return mapToResponse(shipment);
+    }
 }
