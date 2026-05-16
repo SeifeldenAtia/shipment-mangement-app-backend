@@ -17,9 +17,7 @@ public class ShipmentController {
 
     @PostMapping
     private ResponseEntity<ShipmentDTO.ShipmentResponse> createShipment
-            (@Valid @RequestBody
-             ShipmentDTO.CreateShipmentRequest createShipmentRequest
-            ) {
+            (@Valid @RequestBody ShipmentDTO.CreateShipmentRequest createShipmentRequest) {
 
         var shipmentResponse = shipmentService.createShipment(createShipmentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentResponse);
@@ -36,6 +34,13 @@ public class ShipmentController {
     private ResponseEntity<ShipmentDTO.ShipmentResponse> getShipmentById(@PathVariable Long id) {
 
         ShipmentDTO.ShipmentResponse shipment = shipmentService.getShipmentById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(shipment);
+    }
+
+    @GetMapping("/track/{trackingNumber}")
+    private ResponseEntity<ShipmentDTO.ShipmentResponse> getShipmentById(@PathVariable String trackingNumber) {
+
+        ShipmentDTO.ShipmentResponse shipment = shipmentService.getShipmentByTrackingNumber(trackingNumber);
         return ResponseEntity.status(HttpStatus.OK).body(shipment);
     }
 }

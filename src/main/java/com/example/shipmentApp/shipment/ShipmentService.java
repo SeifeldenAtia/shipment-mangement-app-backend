@@ -58,4 +58,11 @@ public class ShipmentService {
 
         return mapToResponse(shipment);
     }
+
+    public ShipmentDTO.ShipmentResponse getShipmentByTrackingNumber(String trackingNumber) {
+        Shipment shipment = shipmentRepository.findByTrackingNumber(trackingNumber)
+                .orElseThrow(() -> new RuntimeException("This shipment isn't exist!"));
+
+        return mapToResponse(shipment);
+    }
 }
