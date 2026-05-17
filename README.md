@@ -28,16 +28,16 @@ A Spring Boot application for managing shipments with real-time updates via WebS
 
 ## Installation & Setup
 
-1. **Clone the repository** (if applicable)
+1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/SeifeldenAtia/shipment-mangement-app-backend.git
    cd shipment
    ```
 
 2. **Configure the database**
-   - Edit `src/main/resources/application.properties`
-   - Set up your database connection details (URL, username, password)
+    - Edit `src/main/resources/application.properties`
+    - Set up your database connection details (URL, username, password)
 
 3. **Build the project**
    ```bash
@@ -89,12 +89,12 @@ Edit `src/main/resources/application.properties` to configure:
 
 - **Server Port**: `server.port` (default: 8080)
 - **Database Connection**:
-  - `spring.datasource.url`
-  - `spring.datasource.username`
-  - `spring.datasource.password`
+    - `spring.datasource.url`
+    - `spring.datasource.username`
+    - `spring.datasource.password`
 - **JPA/Hibernate**:
-  - `spring.jpa.hibernate.ddl-auto`
-  - `spring.jpa.show-sql`
+    - `spring.jpa.hibernate.ddl-auto`
+    - `spring.jpa.show-sql`
 
 Example:
 
